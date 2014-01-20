@@ -1,18 +1,18 @@
 from django.contrib import admin
 
-from models import Coupon, Promotion
-
-
-class CouponAdmin(admin.ModelAdmin):
-    list_display = ('promotion', 'promotion_award',
-    'redeemer_last_name', 'redeemer_first_name', )
-    
-    class Meta:
-        model = Coupon
+from models import Coupon, Promotion, Prize
 
 class PromotionAdmin(admin.ModelAdmin):
-    #will need to be able to add promotions, the award(s), and the promotion's coupon sets.
-    list_display = ('promotion',)
+    prepopulated_fields = {'slug': ('name',)}
     
-admin.site.register(Coupon, CouponAdmin)
+    class Meta:
+        model = Promotion
+        
+    
+class PrizeAdmin(admin.ModelAdmin):
+    
+    class Meta:
+        model = Prize
+        
 admin.site.register(Promotion, PromotionAdmin)
+admin.site.register(Prize, PrizeAdmin)
