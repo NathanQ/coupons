@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
-# urls is wack
 
 urlpatterns = patterns('coupons.views',
-    url(r'^(?P<discipline_slug>\S+)/$', promotion_home, name='promotion_home')
+    url(r'^$', 'promotion_home', name='promotion_home'),
+    url(r'^(?P<code>\S+)/$', 'coupon_view', name='coupon_view')
 )
