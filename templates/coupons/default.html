@@ -3,7 +3,6 @@
 <head>
 </head>
 <body>
-    ooh heck!
     <form>
         <input name="coupon" type="text" id="couponInputValue">
     </form>
@@ -30,8 +29,10 @@
         document.getElementById('couponInputValue').value = couponInputVal;
     }
     $(document).ready(function() {
-      insertCouponValue();
-      
+        
+        if ( urlParams.hasOwnProperty ('coupon')) {
+            insertCouponValue();
+        }
     });
     
 </script>
