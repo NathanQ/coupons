@@ -1,0 +1,56 @@
+{% extends "coupons/base.html" %}
+{% load cms_tags custom_nav_tags %} 
+
+{% block content %}
+
+    <div id="step-four">
+        <div class="row lightbg">
+            <div class="container">
+                <div class="form">
+                {% placeholder 'content' or %}
+                    <div class="left">
+                        <h2>Thank You</h2>
+                        <p>Your gift card will be mailed to the address provided. Click on any of the links below to continue increasing your potash knowledge.</p>
+                        <ul>
+                            <li><a href="http://www.textbooksop.com/about-sop/">About Sulfate of Potash</a></li>
+                            <li><a href="http://www.textbooksop.com/about-sop/high-potassium/">Potassium Management</a></li>
+                            <li><a href="http://www.textbooksop.com/about-sop/high-sulfur/">Sulfate Sulfur</a></li>
+                            <li><a href="http://www.textbooksop.com/about-sop/low-chloride/">Chloride &amp; Salt Sensitivity</a></li>
+                            <li><a href="http://www.textbooksop.com/about-sop/organic/">Organic K+<sup>&reg;</sup> Brand SOP</a></li>
+                        </ul>
+                        <h3><a href="/">textbooksop.com</a> <span> | </span> 1.855.313.3331</h3>
+                    </div>
+                    <div class="right">
+                        <div class="share">
+                            <h2>Share Video</h2>
+                            <p>Share the video using the form below. Please note the recipient will not be eligible for the $25 gift card.</p>
+                            <form id="email_form">
+                                <label for="name">Name</label>
+                                <input id="name" type="text">
+                                <label for="email">Email</label>
+                                <input id="email" type="text">
+                                <input type="submit" id="share" value="Share &#187;" >
+                            </form>
+                        </div>
+                    </div>
+                    <script>
+                            $("#email_form").submit(function(e) {
+                                e.preventDefault();
+                                var name = $('#name').val();
+                                var email = $('#email').val();
+                                var link = 'mailto:'+email+'?subject='+name+'\u00A0'+'sent you the Growing [K]nowledge Video&body=Grow your [K]nowledge on textbooksop.com/growing-knowledge/'
+                                window.open(link,'_blank');
+                            });
+                    </script>
+                    {% endplaceholder %}
+                </div>
+            </div>
+        </div>
+        <div class="row darkbg">
+            <div class="container">
+            </div>
+        </div>
+    </div><!-- /step4 -->
+    
+    
+{% endblock %}

@@ -1,8 +1,14 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import user_passes_test
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
+import datetime
+from datetime import date
 from django import template
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.core.mail import EmailMultiAlternatives
 
 import csv
 
@@ -17,8 +23,12 @@ from .forms import CouponCodeForm, CouponForm
 
 
 def promotion_home(request):
-    #verify the slug
-    #display template for people to enter their coupon
+    '''
+    1.  verify the slug
+    2.  display template for people to enter their coupon
+    3.  on form submission (see forms CouponCodeForm) redirect to coupon view.
+    '''
+    
     form = CouponCodeForm(request.POST or None)
     if form.is_valid():
         code = form.cleaned_data.get('code')
@@ -26,40 +36,66 @@ def promotion_home(request):
         
     return render_to_response("coupons/home.html", {'form':form}, context_instance=RequestContext(request))
 
-    #if coupon is invalid (not a coupon) or used (has a used date), then stay on page with 'sorry' message.
-    #if coupon is valid user can move to form and submit
-    #user submits adding used date to coupon
     
 def coupon_view(request, code):
+    '''
+    1.  if coupon is invalid (not a coupon) or used (has a used date), 
+        then stay on page with 'sorry' message - that fx is in forms.
+    2.  if coupon is valid user can view page
+    3.  on form submission (see forms CouponForm), form saves, emails user and redirects to django page
+    '''
+    
     coupon = get_object_or_404(Coupon, code=code, used__isnull=True)
     form = CouponForm(request.POST or None, instance=coupon)
+    print form
     if form.is_valid():
+        
+        email = form.cleaned_data['email']
+        html_template = 'coupons/thanks_email.html'
+        text_template = 'coupons/thanks_email.txt'
+        html_rendered = render_to_string(html_template, request.GET)
+        text_rendered = render_to_string(text_template, request.GET)
+        subject = 'You did it!'
+        from_email = 'you@mail.com'
+        to_email = [email]
+        msg = EmailMultiAlternatives(subject, text_rendered, from_email, to_email)
+        msg.attach_alternative(html_rendered, 'text/html')
+        msg.send()
         coupon = form.save()
-        # TODO redirect to thanks
+        return redirect('/thank-you/')
 
-    return render_to_response("coupons/promo.html", params, context_instance=RequestContext(request))
-
+    return render_to_response("coupons/promo.html", {'form':form,'coupon':coupon}, context_instance=RequestContext(request))
+    
+@user_passes_test(lambda u: u.is_staff, login_url="/admin/")
 def export_coupon_redeemers(request):
+    '''
+    1.  Must be logged in.
+    2.  go to /admin/coupons/coupon/enroll to download the csv.
+    '''
     
     response = HttpResponse(mimetype='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="coupon_redeemers.csv"'
+    response['Content-Disposition'] = 'attachment; filename="export_coupon_redeemers.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['Promotion', 'Code', 'Award', 'First Name', 'Last Name', 
-                    'Email', 'Phone', 'Address', 'State', 'Zip', ])
+    writer.writerow(['Promotion', 'Code', 'Award', 'Name', 'Company',
+                    'Address', 'City', 'State', 'Zip', 'Email', 'Phone', 'Acres', 'Fertilizers'  ])
 
     coupons = Coupon.objects.all()
     for coupon in coupons:
         writer.writerow([
-            coupons.promotion,
-            coupons.code,
-            coupons.prize,
-            coupons.redeemer_name,
-            coupons.email,
-            coupons.phone,
-            coupons.address,
-            coupons.state,
-            coupons.zip,
+            coupon.promotion,
+            coupon.code,
+            coupon.prize,
+            coupon.name,
+            coupon.company,
+            coupon.address,
+            coupon.state,
+            coupon.city,
+            coupon.zip,
+            coupon.email,
+            coupon.phone,
+            coupon.promotion_answer,
+            coupon.fertilizer_used,
         ])
 
     return response

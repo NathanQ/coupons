@@ -1,1 +1,249 @@
-this page is not made...
+{% extends "coupons/base.html" %}
+
+{% block content %}
+
+    <div id="step-two" class="active">
+        <div class="row lightbg">
+            <div class="container">
+                <!-- add ?api=1&player_id=player1 behind url to turn the api on -->
+                <iframe id="video1" src="{{ coupon.promotion.video_embed_code }}?api=1&amp;player_id=video1" width="940" height="520" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="row darkbg">
+            <div class="container">
+                <div class="videoActions">
+                    <a href="#" id="redeem">Redeem your gift</a>
+                </div>
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div><!-- /step2 -->
+    <div id="step-three">
+        <div class="row lightbg">
+            <div class="container">
+                <div class="form">
+                    <h2>Redeem Your Gift</h2>
+                    <p>Fill out the form below, and we&rsquo;ll send you your gift card. All fields are required</p>
+                    
+                    {% if form %}
+                        <form id="couponForm" onsubmit="" action="" method="POST">
+                            {% csrf_token %} 
+                            <div class="left">
+                                <input id="id_code" type="text" name="code" value="{{ coupon.code }}">
+                                <input id="id_used" type="text" name="used" value="{% now "m/d/Y" %}">
+                                <select id="id_promotion" name="promotion">
+                                    <option value="{{ coupon.promotion.id }}">{{ coupon.promotion }}</option>
+                                </select>
+                                <label for="id_name">Name:</label> <input id="id_name" type="text" name="name" maxlength="255">
+                                <label for="id_company">Company:</label> <input id="id_company" type="text" name="company" maxlength="255">
+                                <label for="id_address">Address:</label> <input id="id_address" name="address">
+                                <div class="city">
+                                    <label for="id_city">City:</label> <input id="id_city" name="city">
+                                </div>
+                                <div class="state">
+                                    <label for="id_state">State:</label> 
+                                    <select id="id_state" name="state">
+                                        <option value="">--</option>
+                                        <option value="AK">AK</option>
+                                        <option value="AL">AL</option>
+                                        <option value="AR">AR</option>
+                                        <option value="AZ">AZ</option>
+                                        <option value="CA">CA</option>
+                                        <option value="CO">CO</option>
+                                        <option value="CT">CT</option>
+                                        <option value="DC">DC</option>
+                                        <option value="DE">DE</option>
+                                        <option value="FL">FL</option>
+                                        <option value="GA">GA</option>
+                                        <option value="HI">HI</option>
+                                        <option value="IA">IA</option>
+                                        <option value="ID">ID</option>
+                                        <option value="IL">IL</option>
+                                        <option value="IN">IN</option>
+                                        <option value="KS">KS</option>
+                                        <option value="KY">KY</option>
+                                        <option value="LA">LA</option>
+                                        <option value="MA">MA</option>
+                                        <option value="MD">MD</option>
+                                        <option value="ME">ME</option>
+                                        <option value="MI">MI</option>
+                                        <option value="MN">MN</option>
+                                        <option value="MO">MO</option>
+                                        <option value="MS">MS</option>
+                                        <option value="MT">MT</option>
+                                        <option value="NC">NC</option>
+                                        <option value="ND">ND</option>
+                                        <option value="NE">NE</option>
+                                        <option value="NH">NH</option>
+                                        <option value="NJ">NJ</option>
+                                        <option value="NM">NM</option>
+                                        <option value="NV">NV</option>
+                                        <option value="NY">NY</option>
+                                        <option value="OH">OH</option>
+                                        <option value="OK">OK</option>
+                                        <option value="OR">OR</option>
+                                        <option value="PA">PA</option>
+                                        <option value="RI">RI</option>
+                                        <option value="SC">SC</option>
+                                        <option value="SD">SD</option>
+                                        <option value="TN">TN</option>
+                                        <option value="TX">TX</option>
+                                        <option value="UT">UT</option>
+                                        <option value="VA">VA</option>
+                                        <option value="VT">VT</option>
+                                        <option value="WA">WA</option>
+                                        <option value="WI">WI</option>
+                                        <option value="WV">WV</option>
+                                        <option value="WY">WY</option>
+                                        <option value="AB">Alberta</option>
+                                        <option value="BC">British Columbia</option>
+                                        <option value="MB">Manitoba</option>
+                                        <option value="NB">New Brunswick</option>
+                                        <option value="NF">Newfoundland and Labrador</option>
+                                        <option value="NT">Northwest Territories</option>
+                                        <option value="NS">Nova Scotia</option>
+                                        <option value="NU">Nunavut</option>
+                                        <option value="ON">Ontario</option>
+                                        <option value="PE">Prince Edward Island</option>
+                                        <option value="PQ">Quebec</option>
+                                        <option value="SK">Saskatchewan</option>
+                                        <option value="YT">Yukon Territory</option>
+                                    </select>
+                                </div>
+                                <div class="zip">
+                                    <label for="id_zip">Zip:</label> <input id="id_zip" name="zip">
+                                </div>
+                                <label for="id_email">Email:</label> <input id="id_email" type="text" name="email" maxlength="75">
+                                <label for="id_phone">Phone:</label> <input id="id_phone" name="phone">
+                            </div>
+                            <div class="right">
+                                <label for="id_prize">Preferred gift card:</label> 
+                                <select name="prize" id="id_prize">
+                                    <option value="" selected="selected"> ----- </option>
+                                    <option value="1">Bass Pro Shops Gift Card</option>
+                                    <option value="2">Cabela's Gift Card</option>
+                                    <option value="3">Visa Gift Card</option>
+                                </select> 
+                                <label for="id_supplier">Who is your primary retail supplier for fertilizer?</label>
+                                <input id="id_supplier" name="supplier">
+                                <label for="id_promotion_answer">{{ form.promotion_answer.label }}</label>
+                                <input id="id_promotion_answer" name="promotion_answer">
+                                <label for="id_fertilizer_used">Which of the following fertilizers do you currently use on your crops? Check all that apply.</label>
+                                <div style="float:left">
+                                    <p><input type="checkbox" name="id_fertilizer_used_1" value="Sulfate of Potash (SOP) "><span>Sulfate of Potash (SOP)</span></p>
+                                    <p><input type="checkbox" name="id_fertilizer_used_2" value="Muriate of Potash (MOP) "><span>Muriate of Potash (MOP)</span></p>
+                                    <p><input type="checkbox" name="id_fertilizer_used_3" value="Potassium Magnesium Sulfate (K-Mag) "><span>Potassium Magnesium Sulfate (K-Mag)</span></p>
+                                    <p><input type="checkbox" name="id_fertilizer_used_4" value="Potassium Thio Sulfate (KTS) "><span>Potassium Thio Sulfate (KTS)</span></p>
+                                    <p><input type="checkbox" name="id_fertilizer_used_5" value="I'm not sure"><span>I'm not sure</span></p>
+                                </div>
+                            
+                            </div>
+                          <input id="id_agree" type="checkbox" checked name="agree" value="yes"><label for="id_agree" class="id_agree">Yes, I understand and agree to the <a href="#" target="_blank">Promotion Terms &amp; Conditions</a></label>
+                          <input id="id_submit" type="submit" value="Submit &#187" />
+                        </form>
+                    {% else %}
+                    {% endif %}
+                    <img src="{{ MEDIA_URL }}coupons/img/cards.jpg" alt="prizes" />
+                </div>
+            </div>
+        </div>
+        <div class="row darkbg">
+            <div class="container">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div> <!-- /step3 -->
+    <script src="http://a.vimeocdn.com/js/froogaloop2.min.js"></script>
+    <script src="{{ MEDIA_URL }}coupons/js/jquery.validate.js"></script>
+    <script>
+        // hide form fields
+        $("label[for='id_code'], #id_code, label[for='id_promotion'], #id_promotion, label[for='id_used'], #id_used").hide();
+        // validate the rest of them
+        (function($,W,D) {
+            var JQUERY4U = {};
+        
+            JQUERY4U.UTIL =
+            {
+                setupFormValidation: function() {
+                    //form validation rules
+                    $("#couponForm").validate({
+                        rules: {
+                            name: "required",
+                            company: "required",
+                            address: "required",
+                            city: "required",
+                            state: "required",
+                            zip: "required",
+                            email: {
+                                required: true,
+                                email: true
+                            },
+                            phone: "required",
+                            prize: "required",
+                            promotion_answer: "required",
+                            supplier: "required",
+                            agree: "required"
+                        },
+                        messages: {
+                            name: "Name is required",
+                            company: "Company is required",
+                            address: "Address is required",
+                            city: "City is required",
+                            state: "State is required",
+                            zip: "Zip is required",
+                            email: "Email is required",
+                            phone: "Phone number is required",
+                            prize: "Please choose your Preferred Gift Card",
+                            promotion_answer: "Please enter Acres farmed or 'None'",
+                            supplier: "Please enter your Fertilizer Supplier or 'None'",
+                            agree: "Please agree to our terms and conditions"
+                        },
+                        submitHandler: function(form) {
+                            form.submit();
+                        }
+                    });
+                }
+            }
+
+            //when the dom has loaded setup form validation rules
+            $(D).ready(function($) {
+                JQUERY4U.UTIL.setupFormValidation();
+            });
+            })(jQuery, window, document);
+            
+        $(document).ready(function() {
+            // Listen for the ready event for any vimeo video players on the page
+            var player = $('#video1')[0];
+            $f(player).addEvent('ready', ready);
+
+            function addEvent(element, eventName, callback) {
+                if (element.addEventListener) {
+                    element.addEventListener(eventName, callback, false);
+                }
+                else {
+                    element.attachEvent(eventName, callback, false);
+                }
+            }
+
+            function ready(player_id) {
+                console.log('video ready!');
+                var froogaloop = $f(player_id);
+
+                function onFinish() {
+                        froogaloop.addEvent('finish', function(data) {
+                            console.log('finish');
+                            $('.videoActions').addClass('active');
+                        });
+                }
+                
+                onFinish();
+            }
+        });
+        
+        $('a#redeem').click(function() {
+            $('#step-three').toggleClass('active');
+            $('#step-two').toggleClass('active');
+            return false;
+        });
+    </script>
+{% endblock %}
